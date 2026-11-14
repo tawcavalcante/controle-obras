@@ -9,7 +9,7 @@ class StatusObra(Enum):
     ENTREGUE = 7
 
 class CategoriaCusto(Enum):
-    MAP_DE_OBRA = 1
+    MAO_DE_OBRA = 1
     MATERIAIS = 2
     EQUIPAMENTO = 3
     TAXAS = 4
