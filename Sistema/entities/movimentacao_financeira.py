@@ -9,6 +9,6 @@ class MovimentacaoFinanceira(ABC):
         self._descricao = descricao
 
     @abstractmethod
-    def celular_impacto_saldo(self) -> float:
+    def calcular_impacto_saldo(self) -> float:
         pass
 
