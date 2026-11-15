@@ -8,6 +8,12 @@ class ControladorObra:
         self._proximo_id = 1
 
     def cadastrar_obra(self, nome:str, localizacao: str, orcamento: float, data_inicio: date) -> Obra:
+        # validacao
+        if not nome or not nome.strip():
+            raise ValueError("Não é possível cadastrar obra sem nome.")
+        if orcamento < 0:
+            raise ValueError("O orçamento inicial não pode ser menor que zero.")
+
         nova_obra = Obra (
             id_obra=self._proximo_id,
             nome=nome,
@@ -24,7 +30,7 @@ class ControladorObra:
         for obra in self.obras:
             if obra.id == id_obra:
                 return obra
-        raise ValueError("Obra não encontrada")
+        raise ValueError("Obra não encontrada.")
 
     def atualizar_status_obra(self, id_obra: int, novo_status:StatusObra) -> bool:
         obra = self.buscar_obra(id_obra)
