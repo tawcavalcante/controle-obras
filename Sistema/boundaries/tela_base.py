@@ -6,9 +6,8 @@ class TelaBase:
         os.system("cls" if os.name == "nt" else "clear")
 
     def cabecalho(self, titulo: str):
-        print("\n" + "=" * 60)
-        print(f" {titulo.upper()}")
-        print("=" * 60)
+        print(f"\n{titulo.upper()}")
+        print("─" * 50)
 
     def pausar(self):
         input("\n[Pressione ENTER para continuar]")
