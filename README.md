@@ -12,8 +12,8 @@ O projeto aplica herança, polimorfismo, composição, associação e dependênc
 
 | Nível | Propósito | Interface | Vídeo         | Commit de entrega    | Status |
 |:---:|---|---|---------------|----------------------|:---:|
-| **1** | Modelagem em UML (diagrama de classes) e implementação das classes, testando todas as funcionalidades por meio de um roteiro de testes | Terminal (`main.py`) | [Link](https://youtu.be/dPLwghKrh_U) | `A definir` | Pendente |
-| **2** | Menu funcional: o usuário navega pelas funcionalidades do sistema | Terminal (menu) | [Em breve]() | `A definir` | Pendente |
+| **1** | Modelagem em UML (diagrama de classes) e implementação das classes, testando todas as funcionalidades por meio de um roteiro de testes | Terminal (`main.py`) | [Link](https://youtu.be/dPLwghKrh_U) | `A definir` | Concluído |
+| **2** | Menu funcional: o usuário navega pelas funcionalidades do sistema | Terminal (menu) | [Link](https://youtu.be/zrEqKtMB_hY) | `A definir` | Enviado |
 | **3** | Persistência dos dados em banco de dados (PostgreSQL) | Terminal (menu) | [Em breve]() | `A definir` | Pendente |
 | **4** | Interface gráfica, com o sistema funcionando em janelas | Janelas (GUI) | [Em breve]()      | `A definir` | Pendente |
 
