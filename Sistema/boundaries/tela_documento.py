@@ -1,13 +1,11 @@
 from boundaries.tela_base import TelaBase
+from database.conexao import obter_conexao
 from entities.obra import Obra
 from entities.documento import Documento
 from entities.enums import TipoDocumento
 
 
 class TelaDocumento(TelaBase):
-    def __init__(self):
-        self._proximo_id_doc = 1
-
     def exibir(self, obra: Obra):
         while True:
             self.limpar_tela()
@@ -34,19 +32,34 @@ class TelaDocumento(TelaBase):
         nome_arquivo = self.ler_texto("Nome do arquivo (ex: Alvara_Construcao.pdf): ")
         tipo = self.selecionar_enum(TipoDocumento, "Tipo de Documento")
 
-        doc = Documento(
-            id_doc=self._proximo_id_doc,
+        doc_temporario = Documento(
+            id_doc=0,
             nome_arquivo=nome_arquivo,
             tipo=tipo,
         )
 
-        if not doc.validar_integridade():
+        if not doc_temporario.validar_integridade():
             print("\n[RECUSADO] Nome de arquivo inválido ou vazio.")
             self.pausar()
             return
 
+        nome_limpo = nome_arquivo.strip()
+        with obter_conexao() as conn:
+            cursor = conn.execute(
+                """
+                INSERT INTO documentos (obra_id, nome_arquivo, tipo)
+                VALUES (?, ?, ?)
+                """,
+                (obra.id, nome_limpo, tipo.value),
+            )
+            novo_id = cursor.lastrowid
+
+        doc = Documento(
+            id_doc=novo_id,
+            nome_arquivo=nome_limpo,
+            tipo=tipo,
+        )
         obra.adicionar_documento(doc)
-        self._proximo_id_doc += 1
         print(f"\n[OK] Documento '{doc.nome_arquivo}' ({self.formatar_enum(doc.tipo)}) anexado.")
         self.pausar()
 
