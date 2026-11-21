@@ -56,3 +56,19 @@ class ControladorFinancas:
         for mov in obra.movimentacoes:
             saldo += mov.calcular_impacto_saldo()
         return saldo
+
+    def excluir_movimentacao(self, id_mov: int, obra: Obra) -> bool:
+        with obter_conexao() as conn:
+            cursor = conn.execute("DELETE FROM movimentacoes WHERE id = ?", (id_mov,))
+            if cursor.rowcount > 0:
+                obra.movimentacoes[:] = [m for m in obra.movimentacoes if m.id != id_mov]
+                return True
+            return False
+
+    def resumo_gastos_por_categoria(self, obra: Obra) -> dict[str, float]:
+        totais: dict[str, float] = {}
+        for mov in obra.movimentacoes:
+            if isinstance(mov, Despesa):
+                nome_cat = mov.categoria.name.replace("_", " ").title()
+                totais[nome_cat] = totais.get(nome_cat, 0.0) + mov.valor
+        return totais

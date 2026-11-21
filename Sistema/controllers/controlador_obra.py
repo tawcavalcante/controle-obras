@@ -114,3 +114,18 @@ class ControladorObra:
             obra.adicionar_movimentacao(mov)
 
         return obra
+
+    def excluir_obra(self, id_obra: int) -> bool:
+        with obter_conexao() as conn:
+            conn.execute("DELETE FROM movimentacoes WHERE obra_id = ?", (id_obra,))
+            conn.execute("DELETE FROM documentos WHERE obra_id = ?", (id_obra,))
+            cursor = conn.execute("DELETE FROM obras WHERE id = ?", (id_obra,))
+            return cursor.rowcount > 0
+
+    def excluir_documento(self, id_doc: int, obra: Obra) -> bool:
+        with obter_conexao() as conn:
+            cursor = conn.execute("DELETE FROM documentos WHERE id = ?", (id_doc,))
+            if cursor.rowcount > 0:
+                obra.documentos[:] = [d for d in obra.documentos if d.id != id_doc]
+                return True
+            return False
