@@ -21,6 +21,38 @@ def _formatar_enum(enum_val) -> str:
     return enum_val.name.replace("_", " ").title()
 
 
+class CampoMonetario(QLineEdit):
+    """Formata automaticamente os dígitos digitados como moeda BRL (ex: 250.000,00)."""
+
+    def __init__(self, placeholder: str = "0,00", parent=None):
+        super().__init__(parent)
+        self.setPlaceholderText(placeholder)
+        self.textEdited.connect(self._formatar_texto)
+
+    def _formatar_texto(self, texto: str):
+        digitos = "".join(ch for ch in texto if ch.isdigit())
+        if not digitos:
+            self.blockSignals(True)
+            self.setText("")
+            self.blockSignals(False)
+            return
+
+        centavos = int(digitos)
+        valor_float = centavos / 100.0
+        formatado = f"{valor_float:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+        self.blockSignals(True)
+        self.setText(formatado)
+        self.setCursorPosition(len(formatado))
+        self.blockSignals(False)
+
+    def valor_float(self) -> float:
+        texto = self.text().strip()
+        if not texto:
+            raise ValueError("Informe um valor numérico válido.")
+        return float(texto.replace(".", "").replace(",", "."))
+
+
 class ModalNovaObra(QDialog):
     def __init__(self, ctrl_obra: ControladorObra, parent=None):
         super().__init__(parent)
@@ -48,8 +80,7 @@ class ModalNovaObra(QDialog):
         layout.addWidget(self.input_local)
 
         layout.addWidget(QLabel("Orçamento previsto (R$):"))
-        self.input_orcamento = QLineEdit()
-        self.input_orcamento.setPlaceholderText("Ex: 250000.00")
+        self.input_orcamento = CampoMonetario("Ex: 250.000,00")
         layout.addWidget(self.input_orcamento)
 
         botoes = QHBoxLayout()
@@ -72,7 +103,7 @@ class ModalNovaObra(QDialog):
             local = self.input_local.text()
             if not local.strip():
                 raise ValueError("Informe a localização da obra.")
-            orcamento = float(self.input_orcamento.text().replace(",", "."))
+            orcamento = self.input_orcamento.valor_float()
 
             self.obra_criada = self.ctrl_obra.cadastrar_obra(
                 nome=nome,
@@ -102,8 +133,7 @@ class ModalReceita(QDialog):
         layout.addWidget(titulo)
 
         layout.addWidget(QLabel("Valor (R$):"))
-        self.input_valor = QLineEdit()
-        self.input_valor.setPlaceholderText("Ex: 50000.00")
+        self.input_valor = CampoMonetario("Ex: 50.000,00")
         layout.addWidget(self.input_valor)
 
         layout.addWidget(QLabel("Origem do recurso:"))
@@ -132,7 +162,7 @@ class ModalReceita(QDialog):
 
     def _salvar(self):
         try:
-            valor = float(self.input_valor.text().replace(",", "."))
+            valor = self.input_valor.valor_float()
             origem = self.input_origem.text().strip()
             desc = self.input_desc.text().strip()
             if not origem or not desc:
@@ -167,8 +197,7 @@ class ModalDespesa(QDialog):
         layout.addWidget(titulo)
 
         layout.addWidget(QLabel("Valor (R$):"))
-        self.input_valor = QLineEdit()
-        self.input_valor.setPlaceholderText("Ex: 12000.00")
+        self.input_valor = CampoMonetario("Ex: 12.000,00")
         layout.addWidget(self.input_valor)
 
         layout.addWidget(QLabel("Categoria de custo:"))
@@ -198,7 +227,7 @@ class ModalDespesa(QDialog):
 
     def _salvar(self):
         try:
-            valor = float(self.input_valor.text().replace(",", "."))
+            valor = self.input_valor.valor_float()
             categoria = self.combo_categoria.currentData()
             desc = self.input_desc.text().strip()
             if not desc:

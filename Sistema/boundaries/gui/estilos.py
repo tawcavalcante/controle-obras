@@ -223,4 +223,52 @@ QScrollArea {
     border: none;
     background: transparent;
 }
+
+/* CARD ITEM NA SIDEBAR */
+QFrame#ItemObraSidebar {
+    background-color: transparent;
+    border: 1px solid #1F242D;
+    border-radius: 12px;
+}
+
+QFrame#ItemObraSidebar:hover {
+    background-color: #1A1E26;
+}
+
+QFrame#ItemObraSidebarAtivo {
+    background-color: #2563EB;
+    border: none;
+    border-radius: 12px;
+}
+
+/* BOTÕES DE EXCLUSÃO */
+QPushButton#BtnExcluirObra {
+    background-color: #FEE2E2;
+    color: #B91C1C;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+QPushButton#BtnExcluirObra:hover {
+    background-color: #FECACA;
+}
+
+QPushButton#BtnExcluirLinha {
+    background-color: transparent;
+    color: #9CA3AF;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 2px 7px;
+}
+
+QPushButton#BtnExcluirLinha:hover {
+    background-color: #FEE2E2;
+    color: #B91C1C;
+}
+
 """
